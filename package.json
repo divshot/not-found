@@ -1,0 +1,42 @@
+{
+  "name": "not-found",
+  "version": "0.1.0",
+  "description": "Express/Connect middleware to serve a default not found/404 page",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/ --reporter dot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/divshot/not-found.git"
+  },
+  "keywords": [
+    "divshot",
+    "superstatic",
+    "notfound",
+    "404",
+    "error"
+  ],
+  "author": "Divshot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/divshot/not-found/issues"
+  },
+  "homepage": "https://github.com/divshot/not-found",
+  "dependencies": {
+    "deliver": "^0.4.3",
+    "file-exists": "^0.1.1",
+    "is-url": "^1.1.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "connect": "^3.0.2",
+    "mkdirp": "^0.5.0",
+    "mocha": "^1.20.1",
+    "rmdir": "^1.0.4",
+    "supertest": "^0.13.0"
+  }
+}
