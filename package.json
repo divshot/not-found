@@ -1,6 +1,6 @@
 {
   "name": "not-found",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Express/Connect middleware to serve a default not found/404 page",
   "main": "index.js",
   "directories": {
@@ -37,6 +37,7 @@
     "mkdirp": "^0.5.0",
     "mocha": "^1.20.1",
     "rmdir": "^1.0.4",
-    "supertest": "^0.13.0"
+    "supertest": "^0.13.0",
+    "mocksy": "^0.1.7"
   }
 }

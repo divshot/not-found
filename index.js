@@ -2,18 +2,16 @@ var deliver = require('deliver');
 var isUrl = require('is-url');
 var fileExists = require('file-exists');
 
-var notFound = function (options) {
+var notFound = function (file, options) {
   options = options || {};
   
-  var filepath;
-  
-  if (options.exists) fileExists = options.exists; // TODO: test this
-  if (!isUrl(options.file) && fileExists(options.file)) filepath = options.file;
+  if (options.exists) fileExists = options.exists;
+  if (!isUrl(file) && !fileExists(file)) file = null;
   
   return function (req, res, next) {
-    if (!filepath) return next();
+    if (!file) return next();
     
-    req.url = filepath;
+    req.url = file;
     deliver(req, {
       statusCode: 404
     }).pipe(res);

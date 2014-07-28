@@ -7,15 +7,15 @@ var path = require('path');
 var expect = require('chai').expect;
 var mkdirp = require('mkdirp');
 var rmdir = require('rmdir');
+var Mocksy = require('mocksy');
+var server = new Mocksy({port: 5432});
 
-describe.only('not found middleware', function() {
+describe('not found middleware', function() {
   it('serves a custom 404 page', function (done) {
     fs.writeFileSync('error.html', 'error');
     
     var app = connect()
-      .use(notFound({
-        file: process.cwd() + '/error.html'
-      }));
+      .use(notFound(process.cwd() + '/error.html'));
     
     request(app)
       .get('/asdfasdf')
@@ -36,9 +36,7 @@ describe.only('not found middleware', function() {
     fs.writeFileSync(rootDir + '/error.html', 'error page');
     
     var app = connect()
-      .use(notFound({
-        file: path.join(process.cwd(), rootDir, 'error.html')
-      }));
+      .use(notFound(path.join(process.cwd(), rootDir, 'error.html')));
     
     request(app)
       .get('/')
@@ -66,9 +64,7 @@ describe.only('not found middleware', function() {
   
   it('skips the middleware if the file is not found', function (done) {
     var app = connect()
-      .use(notFound({
-        file: __dirname + '/qwer.html'
-      }));
+      .use(notFound(__dirname + '/qwer.html'));
     
     request(app)
       .get('/')
@@ -76,18 +72,25 @@ describe.only('not found middleware', function() {
       .end(done);
   });
   
-  it('proxies a remote 404 page', function (done) {
-    var remoteErrorPageUrl = 'http://localhost:4567';
-    
-    var app = connect()
-      .use(notFound({
-        file: remoteErrorPageUrl
-      }));
-    
-    request(app)
-      .get('/not-found')
-      .expect(404)
-      .end(done);
+  it.only('proxies a remote 404 page', function (done) {
+    server.start(function (err) {
+      var remoteErrorPageUrl = 'http://127.0.0.1:5432';
+      var app = connect()
+        .use(notFound(remoteErrorPageUrl));
+      
+      request(app)
+        .get('/not-found')
+        .expect(404)
+        .expect(function (data) {
+          var res = data.res.text;
+          expect(res).to.equal('Not Found');
+        })
+        .end(function (err) {
+          server.stop(function () {
+            done(err);
+          });
+        });
+      });
   });
   
   it('overrides the file exists method', function (done) {
@@ -95,8 +98,7 @@ describe.only('not found middleware', function() {
     
     var existsCalled = false;
     var app = connect()
-      .use(notFound({
-        file: process.cwd() + '/error.html',
+      .use(notFound(process.cwd() + '/error.html', {
         exists: function () {
           existsCalled = true;
           return true
