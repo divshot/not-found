@@ -18,9 +18,7 @@ var notFound = require('not-found');
 
 var app = express();
 
-app.use(notFound({
-  file: __dirname + '/not-found.html'
-}));
+app.use(notFound(__dirname + '/not-found.html'));
 
 app.listen(3000, function () {
 
@@ -35,19 +33,16 @@ var notFound = require('not-found');
 
 var app = express();
 
-app.use(notFound({
-  file: 'http://domain.com/not-found.html'
-}));
+app.use(notFound('http://domain.com/not-found.html'));
 
 app.listen(3000, function () {
 
 });
 ```
 
-### notFound(options)
+### notFound(file)
 
-* **options**
-  * `file` - the path to the local file or a url for a remote file. This is required. It will skip the middleware if it is not provided or the file does not exists
+* `file` - the path to the local file or a url for a remote file. This is required. It will skip the middleware if it is not provided or the file does not exists
 
 ## Run Tests
 
