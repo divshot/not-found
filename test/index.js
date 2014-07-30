@@ -72,7 +72,7 @@ describe('not found middleware', function() {
       .end(done);
   });
   
-  it.only('proxies a remote 404 page', function (done) {
+  it('proxies a remote 404 page', function (done) {
     server.start(function (err) {
       var remoteErrorPageUrl = 'http://127.0.0.1:5432';
       var app = connect()
@@ -93,28 +93,60 @@ describe('not found middleware', function() {
       });
   });
   
-  it('overrides the file exists method', function (done) {
-    fs.writeFileSync('error.html', 'error');
+  describe('overrides', function () {
+    it('exists method', function (done) {
+      fs.writeFileSync('error.html', 'error');
+      
+      var existsCalled = false;
+      var app = connect()
+        .use(notFound(process.cwd() + '/error.html', {
+          exists: function () {
+            existsCalled = true;
+            return true
+          }
+        }));
+      
+      request(app)
+        .get('/asdfasdf')
+        .expect('error')
+        .expect(404)
+        .expect(function () {
+          expect(existsCalled).to.equal(true);
+        })
+        .end(function (err) {
+          fs.unlinkSync('error.html');
+          done(err);
+        });
+    });
     
-    var existsCalled = false;
-    var app = connect()
-      .use(notFound(process.cwd() + '/error.html', {
-        exists: function () {
-          existsCalled = true;
-          return true
-        }
-      }));
-    
-    request(app)
-      .get('/asdfasdf')
-      .expect('error')
-      .expect(404)
-      .expect(function () {
-        expect(existsCalled).to.equal(true);
-      })
-      .end(function (err) {
-        fs.unlinkSync('error.html');
-        done(err);
-      });
+    it('fullPath method', function (done) {
+      var fullPathCalled = false;
+      fs.writeFileSync('error.html', 'error');
+      
+      var existsCalled = false;
+      var app = connect()
+        .use(notFound(process.cwd() + '/error.html', {
+          exists: function () {
+            return true;
+          },
+          fullPath: function (pathname) {
+            fullPathCalled = true;
+            return {
+              root: '/',
+              pathname: pathname
+            }
+          }
+        }));
+      
+      request(app)
+        .get('/asdfasdf')
+        .expect(function () {
+          expect(fullPathCalled).to.equal(true);
+        })
+        .end(function (err) {
+          fs.unlinkSync('error.html');
+          done(err);
+        });
+    });
   });
 });

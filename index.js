@@ -9,12 +9,21 @@ var notFound = function (file, options) {
   if (!isUrl(file) && !fileExists(file)) file = null;
   
   return function (req, res, next) {
+    var reqOptions = {
+      statusCode: 404
+    };
+    
     if (!file) return next();
     
     req.url = file;
-    deliver(req, {
-      statusCode: 404
-    }).pipe(res);
+    
+    if (options.fullPath) {
+      var p = options.fullPath(file);
+      reqOptions.root = p.root;
+      req.url = p.pathname;
+    }
+    
+    deliver(req, reqOptions).pipe(res);
   };
 };
 
