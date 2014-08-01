@@ -149,4 +149,24 @@ describe('not found middleware', function() {
         });
     });
   });
+
+  it('default file in options', function (done) {
+    fs.writeFileSync('error2.html', 'error');
+    
+    var app = connect()
+      .use(notFound(process.cwd() + '/error.html', {
+        _default: process.cwd() + '/error2.html'
+      }));
+    
+    request(app)
+      .get('/asdfasdf')
+      .expect('error')
+      .expect(404)
+      .end(function (err) {
+        fs.unlinkSync('error2.html');
+        
+        if (err) throw err;
+        done();
+      });
+  });
 });

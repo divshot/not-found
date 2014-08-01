@@ -6,12 +6,13 @@ var notFound = function (file, options) {
   options = options || {};
   
   if (options.exists) fileExists = options.exists;
-  if (!isUrl(file) && !fileExists(file)) file = null;
+  if (!isUrl(file) && !fileExists(file)) file = options._default;
   
   return function (req, res, next) {
     var reqOptions = {
       statusCode: 404
     };
+    
     
     if (!file) return next();
     

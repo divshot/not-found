@@ -1,6 +1,6 @@
 {
   "name": "not-found",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Express/Connect middleware to serve a default not found/404 page",
   "main": "index.js",
   "directories": {
