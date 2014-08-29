@@ -13,7 +13,6 @@ var notFound = function (file, options) {
       statusCode: 404
     };
     
-    
     if (!file) return next();
     
     req.url = file;
@@ -24,6 +23,7 @@ var notFound = function (file, options) {
       req.url = p.pathname;
     }
     
+    res.statusCode = 404;
     deliver(req, reqOptions).pipe(res);
   };
 };
