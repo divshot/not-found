@@ -28,7 +28,7 @@ var notFound = function (file, options) {
     }
     
     res.statusCode = 404;
-    deliver(req, reqOptions).pipe(res);
+    deliver(req, res, reqOptions).pipe(res);
   };
 };
 
