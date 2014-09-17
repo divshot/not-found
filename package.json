@@ -1,6 +1,6 @@
 {
   "name": "not-found",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Express/Connect middleware to serve a default not found/404 page",
   "main": "index.js",
   "directories": {
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/divshot/not-found",
   "dependencies": {
-    "deliver": "^1.0.0",
+    "deliver": "^1.1.0",
     "file-exists": "^0.1.1",
     "is-url": "^1.1.0"
   },

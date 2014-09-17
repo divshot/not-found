@@ -14,7 +14,8 @@ var notFound = function (file, options) {
   
   return function (req, res, next) {
     var reqOptions = {
-      statusCode: 404
+      statusCode: 404,
+      headers: options.headers
     };
     
     if (!file) return next();
